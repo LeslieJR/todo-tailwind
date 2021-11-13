@@ -17,7 +17,7 @@
           Sign Up
         </h2>
       </div>
-      <form class="mt-8 space-y-6">
+      <div class="mt-8 space-y-6">
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email" class="sr-only">Email address</label>
@@ -25,7 +25,6 @@
               id="email"
               v-model="email"
               type="email"
-              autocomplete="email"
               required
               class="
                 appearance-none
@@ -52,9 +51,8 @@
             <label for="password" class="sr-only">Password</label>
             <input
               id="password"
-              v-model="password"
               type="password"
-              autocomplete="current-password"
+              v-model="password"
               required
               class="
                 appearance-none
@@ -161,7 +159,7 @@
             </a>
           </p>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -202,13 +200,16 @@ export default {
           },
           body: JSON.stringify(body),
         });
+
         const data = await res.json();
 
         if (data.error) {
           alert(data.error);
-        } else {
-          this.$router.push('/signin')
+          return
         }
+
+        this.$router.push('/signin')
+        
       } catch (_) {
         console.log("There was an error");
       }
