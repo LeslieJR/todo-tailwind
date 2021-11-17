@@ -173,17 +173,16 @@ export default {
           alert(data.error);
           return;
         }
-        
+
         const token = data.token;
         const user_id = data.user_id;
-        console.log(data)
-        localStorage.setItem('token', token)
-        localStorage.setItem('user', user_id)
 
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", user_id);
 
         this.$router.push("/tasks");
       } catch (err) {
-        console.log("There was an error:"+err.message);
+        console.log("There was an error:" + err.message);
       }
     },
   },

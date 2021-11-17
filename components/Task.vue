@@ -6,7 +6,7 @@
         {{ description }}
       </p>
       <button
-        @click="onEdit"
+        @click="onEdit(id)"
         class="
           bg-blue-500
           hover:bg-blue-700
@@ -62,7 +62,9 @@ export default {
   },
 
   methods: {
-    onEdit() {},
+    onEdit(id) {
+      this.$router.push(`/details/${id}`);
+    },
     async onRemove(id) {
       const hostname = `http://localhost:4200/tasks/remove/${id}`;
       const token = window.localStorage.getItem("token");
