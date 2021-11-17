@@ -12,6 +12,7 @@
             "
           >
             <button
+            @click="onLogout"
               class="
                 bg-blue-500
                 hover:bg-blue-700
@@ -30,6 +31,21 @@
     </nav>
   </div>
 </template>
-<style scoped>
-
-</style>
+<script>
+export default {
+  methods:{
+    onLogout(){
+      try{
+        const token = window.localStorage.getItem('token')
+        if(!token){
+          console.log('no token saved')
+        }
+        window.localStorage.clear()
+        this.$router.push('/signin')
+      }catch(err){
+        console.log(err.message)
+      }
+    }
+  }
+}
+</script>

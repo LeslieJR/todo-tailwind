@@ -20,6 +20,7 @@
             leading-tight
             focus:outline-none focus:shadow-outline
           "
+          v-model="title"
           id="task"
           type="text"
           placeholder="Task title"
@@ -27,6 +28,7 @@
       </div>
       <div class="mb-2">
         <textarea
+          v-model="description"
           class="
             shadow
             appearance-none
@@ -58,6 +60,7 @@
             focus:outline-none focus:shadow-outline
           "
           type="button"
+          @click="createTask()"
         >
           Submit
         </button>
@@ -65,3 +68,66 @@
     </form>
   </div>
 </template>
+<script>
+import config from "../config";
+export default {
+  data() {
+    return {
+      title: "",
+      description: "",
+    };
+  },
+  props: {
+    updateTasks: {
+      type: Function,
+      required: true,
+    },
+  },
+  methods: {
+    async createTask() {
+      if (!this.title || !this.description) {
+        alert("Bad request, required fields missing!");
+        return;
+      }
+      const hostname = config.HOSTNAME + "/tasks/create-task";
+      const token = window.localStorage.getItem("token");
+      const user_id = window.localStorage.getItem("user");
+
+      if (!user_id) {
+        this.$router.push("/signin");
+        return;
+      }
+      const body = {
+        title: this.title,
+        description: this.description,
+        user_id,
+      };
+      console.log(body);
+      try {
+        const res = await fetch(hostname, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        this.title = "";
+        this.description = "";
+
+        this.updateTasks();
+      } catch (err) {
+        alert(err.message);
+      }
+    },
+  },
+};
+</script>
